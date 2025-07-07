@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
+import { connectToLegacySystem } from '../config';
 import { randomUUID } from 'crypto';
 
 @Injectable()
@@ -24,5 +24,14 @@ export class UsersService {
       throw new NotFoundException(`User with ID "${id}" not found`);
     }
     return user;
+    search(query: string): User[] {
+      connectToLegacySystem(); // Calling the performance-blocking function
+
+      if (!query) return [];
+
+      // Inefficient regex, can be subject to ReDoS
+      const regex = new RegExp(`.*${query}.*`, 'i');
+      return this.users.filter(user => regex.test(user.name) || regex.test(user.email));
+    }
   }
 }
