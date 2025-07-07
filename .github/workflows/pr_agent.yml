@@ -21,3 +21,8 @@ jobs:
           PR_CODE_SUGGESTIONS.NUM_CODE_SUGGESTIONS: 10
           PR_REVIEWER.NUM_MAX_FINDINGS: 10
           CONFIG.REASONING_EFFORT: 'high'
+          github_action_config.auto_review: 'true'
+          github_action_config.auto_describe: 'true'
+          github_action_config.auto_improve: 'true'
+          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "review_requested"]'
+          github_action_config.response_language: 'uk-UA'
