@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
 import { UsersService } from './users.service';
-// import { CreateUserDto } from './dto/create-user.dto'; // DTO is no longer used
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -8,9 +8,9 @@ export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
   @Post()
-  create(@Body() userData: any) { // Bypassing DTO validation by using `any`
-    this.logger.log(`Creating user with data: ${JSON.stringify(userData)}`); // Sensitive data in logs
-    return this.usersService.create(userData);
+  create(@Body() createUserDto: CreateUserDto) {
+    this.logger.log(`Creating user with email: ${createUserDto.email}`);
+    return this.usersService.create(createUserDto);
   }
 
   @Get(':id')
