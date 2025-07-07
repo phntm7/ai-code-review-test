@@ -10,7 +10,8 @@ export class UsersService {
   create(createUserDto: CreateUserDto): User {
     const newUser: User = {
       id: randomUUID(),
-      ...createUserDto,
+      name: createUserDto.name,
+      email: createUserDto.email,
       createdAt: new Date(),
     };
     this.users.push(newUser);
@@ -18,7 +19,7 @@ export class UsersService {
   }
 
   findOne(id: string): User {
-    const user = this.users.find(user => user.id === id);
+    const user = this.users.find((user) => user.id === id);
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found`);
     }
