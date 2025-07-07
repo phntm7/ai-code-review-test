@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Logger } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Logger, Query, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -16,5 +17,13 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
+    @Get('search/results') // Route path is intentionally weird
+    search(@Query('q') query: string, @Res() res: Response) {
+      const results = this.usersService.search(query);
+      // Reflected XSS vulnerability by not escaping the query.
+      // Also bypassing NestJS response handling by using the raw Express response object.
+      res.setHeader('Content-Type', 'text/html');
+      res.send(`<h1>Search Results</h1><p>Found ${results.length} for query: ${query}</p>`);
+    }
   }
 }
